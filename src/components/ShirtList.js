@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import { Paper } from '@material-ui/core'
 import DataTable from './DataTable'
-import { fetchJackets } from '../utils/apiRequests'
+import { fetchShirts } from '../utils/apiRequests'
 import { columns } from '../utils/columns'
 
-const JacketList = () => {
-    const [jackets, setJackets] = useState([])
+const ShirtList = () => {
+    const [shirts, setShirts] = useState([])
 
     useEffect(() => {
-        fetchJackets(setJackets)
+        fetchShirts(setShirts)
     }, [])
 
     return (
         <Paper>
-            <DataTable columns={columns} data={jackets} />
+            <DataTable columns={columns} data={shirts} />
         </Paper>
     )
 }
-export default JacketList
+export default ShirtList
