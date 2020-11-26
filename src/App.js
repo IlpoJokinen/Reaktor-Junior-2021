@@ -1,25 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react'
+import './App.css'
+import { AppBar, Toolbar, Typography, Tabs, Tab, Grid } from '@material-ui/core'
 
-function App() {
+const App = () => {
+  const [category, setCategory] = useState('jackets')
+
+  const changeCategory = (category) => {
+    setCategory(category)
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Grid container>
+      <AppBar position='static'>
+        <Toolbar>
+          <Typography variant='h6'>
+            Warehouse management tool
+        </Typography>
+        </Toolbar>
+        <Tabs value={category} onChange={changeCategory}>
+          <Tab value='jackets' label='Jackets' />
+          <Tab value='shirts' label='Shirts' />
+          <Tab value='accessories' label='Accessories' />
+        </Tabs>
+      </AppBar>
+    </Grid>
+  )
 }
-
-export default App;
+export default App
