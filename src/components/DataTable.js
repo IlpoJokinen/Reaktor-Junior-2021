@@ -8,15 +8,12 @@ import {
     TableRow,
     TablePagination,
     TableBody,
-    Button,
-    CircularProgress
 } from '@material-ui/core'
-import { fetchManufacturersAvailability } from '../utils/apiRequests'
+import AvailabilityButton from './AvailabiltyButton'
 
 const DataTable = ({ columns, data }) => {
     const [page, setPage] = useState(0)
     const [rowsPerPage, setRowsPerPage] = useState(10)
-    const [availability, setAvailability] = useState({ loading: false, id: '', status: null })
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage)
@@ -26,13 +23,6 @@ const DataTable = ({ columns, data }) => {
         setRowsPerPage(+event.target.value)
         setPage(0)
     }
-
-    const showAvailability = async (id, manufacturer) => {
-        setAvailability(prevState => ({ ...prevState, id: id }))
-        const fetchedManufacturerData = await fetchManufacturersAvailability(manufacturer, id, setAvailability)
-        return fetchedManufacturerData
-    }
-
 
     return (
         <Paper>
@@ -59,49 +49,11 @@ const DataTable = ({ columns, data }) => {
                                         align={'center'}
                                     >
                                         {dataObj[column.label.charAt(0).toLowerCase() + column.label.slice(1)]}
-                                        {column.label === 'Availability' && !availability.loading && !availability.status && (
-                                            <Button
-                                                variant='outlined'
-                                                color='primary'
-                                                onClick={() => showAvailability(dataObj.id, dataObj.manufacturer)}>
-                                                Availability
-                                            </Button>
-                                        )}
-                                        {column.label === 'Availability' && availability.loading && !availability.status && availability.id === dataObj.id && (
-                                            <CircularProgress />
-                                        )}
-                                        {column.label === 'Availability' && availability.loading && availability.status && availability.id === dataObj.id && (
-                                            <CircularProgress />
-                                        )}
-                                        {column.label === 'Availability' && availability.loading && !availability.status && availability.id !== dataObj.id && (
-                                            <Button
-                                                disabled
-                                                variant='outlined'
-                                                color='primary'
-                                                onClick={() => showAvailability(dataObj.id, dataObj.manufacturer)}>
-                                                Availability
-                                            </Button>
-                                        )}
-                                        {column.label === 'Availability' && !availability.loading && availability.status && availability.id === dataObj.id && (
-                                            <p>{availability.status}</p>
-                                        )}
-                                        {column.label === 'Availability' && !availability.loading && availability.status && availability.id !== dataObj.id && (
-                                            <Button
-                                                variant='outlined'
-                                                color='primary'
-                                                onClick={() => showAvailability(dataObj.id, dataObj.manufacturer)}>
-                                                Availability
-                                            </Button>
-                                        )}
-                                        {column.label === 'Availability' && availability.loading && availability.status && availability.id !== dataObj.id && (
-                                            <Button
-                                                disabled
-                                                variant='outlined'
-                                                color='primary'
-                                                onClick={() => showAvailability(dataObj.id, dataObj.manufacturer)}>
-                                                Availability
-                                            </Button>
-                                        )}
+                                        <AvailabilityButton
+                                            label={column.label}
+                                            productId={dataObj.id}
+                                            manufacturer={dataObj.manufacturer}
+                                        />
                                     </TableCell>
                                 ))}
                             </TableRow>
