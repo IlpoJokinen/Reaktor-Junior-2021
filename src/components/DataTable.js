@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import {
     TableCell,
     Table,
@@ -8,13 +8,16 @@ import {
     TableRow,
     TablePagination,
     TableBody,
-    Button
+    Button,
+    CircularProgress
 } from '@material-ui/core'
 import { fetchManufacturersAvailability } from '../utils/apiRequests'
 
 const DataTable = ({ columns, data }) => {
     const [page, setPage] = useState(0)
     const [rowsPerPage, setRowsPerPage] = useState(10)
+    const [availability, setAvailability] = useState({ loading: false, id: '', status: null })
+
     const handleChangePage = (event, newPage) => {
         setPage(newPage)
     }
@@ -23,17 +26,14 @@ const DataTable = ({ columns, data }) => {
         setRowsPerPage(+event.target.value)
         setPage(0)
     }
-    /*const ids = data.map(data => data.id)
-    const manufacturers = data.map(data => data.manufacturer)
-    const uniqueManufacturers = [...new Set(manufacturers)]
-    console.log(uniqueManufacturers)
-    useEffect(() => {
-        data.map((dataObj) => {
-            const manufacturer = dataObj.manufacturer
-            const id = dataObj.id
-            fetchManufacturersAvailability(manufacturer, id)
-        })
-    }, [])*/
+
+    const showAvailability = async (id, manufacturer) => {
+        setAvailability(prevState => ({ ...prevState, id: id }))
+        const fetchedManufacturerData = await fetchManufacturersAvailability(manufacturer, id, setAvailability)
+        return fetchedManufacturerData
+    }
+
+
     return (
         <Paper>
             <TableContainer style={{ maxHeight: '82vh' }}>
@@ -59,8 +59,48 @@ const DataTable = ({ columns, data }) => {
                                         align={'center'}
                                     >
                                         {dataObj[column.label.charAt(0).toLowerCase() + column.label.slice(1)]}
-                                        {column.label === 'Availability' && (
-                                            <Button variant='outlined' color='primary'>Availability</Button>
+                                        {column.label === 'Availability' && !availability.loading && !availability.status && (
+                                            <Button
+                                                variant='outlined'
+                                                color='primary'
+                                                onClick={() => showAvailability(dataObj.id, dataObj.manufacturer)}>
+                                                Availability
+                                            </Button>
+                                        )}
+                                        {column.label === 'Availability' && availability.loading && !availability.status && availability.id === dataObj.id && (
+                                            <CircularProgress />
+                                        )}
+                                        {column.label === 'Availability' && availability.loading && availability.status && availability.id === dataObj.id && (
+                                            <CircularProgress />
+                                        )}
+                                        {column.label === 'Availability' && availability.loading && !availability.status && availability.id !== dataObj.id && (
+                                            <Button
+                                                disabled
+                                                variant='outlined'
+                                                color='primary'
+                                                onClick={() => showAvailability(dataObj.id, dataObj.manufacturer)}>
+                                                Availability
+                                            </Button>
+                                        )}
+                                        {column.label === 'Availability' && !availability.loading && availability.status && availability.id === dataObj.id && (
+                                            <p>{availability.status}</p>
+                                        )}
+                                        {column.label === 'Availability' && !availability.loading && availability.status && availability.id !== dataObj.id && (
+                                            <Button
+                                                variant='outlined'
+                                                color='primary'
+                                                onClick={() => showAvailability(dataObj.id, dataObj.manufacturer)}>
+                                                Availability
+                                            </Button>
+                                        )}
+                                        {column.label === 'Availability' && availability.loading && availability.status && availability.id !== dataObj.id && (
+                                            <Button
+                                                disabled
+                                                variant='outlined'
+                                                color='primary'
+                                                onClick={() => showAvailability(dataObj.id, dataObj.manufacturer)}>
+                                                Availability
+                                            </Button>
                                         )}
                                     </TableCell>
                                 ))}

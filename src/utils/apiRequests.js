@@ -17,12 +17,16 @@ export const fetchAccessories = (setAccessories) => {
         .then(data => setAccessories(data))
 }
 
-export const fetchManufacturersAvailability = (manufacturer, id) => {
-    fetch(`https://bad-api-assignment.reaktor.com/availability/${manufacturer}`)
+export const fetchManufacturersAvailability = async (manufacturer, id, setAvailability) => {
+    let availability
+    setAvailability(prevState => ({ ...prevState, loading: true }))
+    await fetch(`https://bad-api-assignment.reaktor.com/availability/${manufacturer}`)
         .then(response => response.json())
         .then(data => {
-            console.log('haloo')
             const productsAvailability = data.response.find((obj) => obj.id === id.toUpperCase())
-            console.log('availability', productsAvailability.DATAPAYLOAD.split(/['>', '</]/)[6])
+            availability = productsAvailability.DATAPAYLOAD.split(/['>', '</]/)[6]
         })
+    setAvailability(prevState => ({ ...prevState, loading: false, status: availability }))
+
+    return
 }
