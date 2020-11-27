@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { Button, IconButton, CircularProgress, Grid } from '@material-ui/core'
 import { fetchManufacturersAvailability } from '../utils/apiRequests'
-import RefreshIcon from '@material-ui/icons/Refresh';
+import { Refresh, CancelOutlined, CheckCircleOutlined } from '@material-ui/icons';
 
-const AvailabilityButton = ({ label, productId, manufacturer, setErrorMsg }) => {
+const AvailabilityButton = ({ label, productId, manufacturer }) => {
     const [availability, setAvailability] = useState({ loading: false, id: '', status: null, error: null })
 
     const showAvailability = async (id, manufacturer) => {
@@ -13,7 +13,7 @@ const AvailabilityButton = ({ label, productId, manufacturer, setErrorMsg }) => 
     }
 
     return (
-        <Grid container>
+        <Grid container direction='row' justify='center'>
             {
                 label === 'Availability' && !availability.loading && !availability.status && !availability.error && (
                     <Button
@@ -47,7 +47,20 @@ const AvailabilityButton = ({ label, productId, manufacturer, setErrorMsg }) => 
             }
             {
                 label === 'Availability' && !availability.loading && availability.status && availability.id === productId && (
-                    <p>{availability.status}</p>
+                    <Grid item container justify='center' alignItems='center' spacing={1}>
+                        <Grid item>
+                            <p>{availability.status}</p>
+                        </Grid>
+                        {availability.status !== 'OUTOFSTOCK' ? (
+                            <Grid item>
+                                <CheckCircleOutlined color='action' />
+                            </Grid>
+                        ) :
+                            <Grid item>
+                                <CancelOutlined color='error' />
+                            </Grid>
+                        }
+                    </Grid>
                 )
             }
             {
@@ -76,8 +89,8 @@ const AvailabilityButton = ({ label, productId, manufacturer, setErrorMsg }) => 
                     <Grid item container direction='row'>
                         <Grid item><p style={{ color: 'red' }}>Request failed, try again</p></Grid>
                         <Grid item>
-                            <IconButton>
-                                <RefreshIcon onClick={() => showAvailability(productId, manufacturer)} />
+                            <IconButton onClick={() => showAvailability(productId, manufacturer)} >
+                                <Refresh />
                             </IconButton>
                         </Grid>
                     </Grid>
