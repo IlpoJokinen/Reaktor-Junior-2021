@@ -26,7 +26,7 @@ const DataTable = ({ columns, data }) => {
 
     return (
         <Paper>
-            <TableContainer style={{ maxHeight: '82vh' }}>
+            <TableContainer style={{ height: '82vh' }}>
                 <Table stickyHeader>
                     <TableHead>
                         <TableRow>

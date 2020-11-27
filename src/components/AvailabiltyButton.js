@@ -5,7 +5,7 @@ import { Refresh, CancelOutlined, CheckCircleOutlined } from '@material-ui/icons
 
 const AvailabilityButton = ({ label, productId, manufacturer }) => {
     const [availability, setAvailability] = useState({ loading: false, id: '', status: null, error: null })
-
+    const maxWidthOfButton = 220
     const showAvailability = async (id, manufacturer) => {
         setAvailability(prevState => ({ ...prevState, id: id, error: null }))
         const fetchedManufacturerData = await fetchManufacturersAvailability(manufacturer, id, setAvailability)
@@ -86,7 +86,7 @@ const AvailabilityButton = ({ label, productId, manufacturer }) => {
             }
             {
                 label === 'Availability' && availability.error && availability.id === productId && (
-                    <Grid item container direction='row'>
+                    <Grid item container direction='row' justify='center' style={{ maxWidth: maxWidthOfButton }}>
                         <Grid item><p style={{ color: 'red' }}>Request failed, try again</p></Grid>
                         <Grid item>
                             <IconButton onClick={() => showAvailability(productId, manufacturer)} >
