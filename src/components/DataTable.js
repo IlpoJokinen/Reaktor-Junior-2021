@@ -53,6 +53,7 @@ const DataTable = ({ columns, data }) => {
                                             label={column.label}
                                             productId={dataObj.id}
                                             manufacturer={dataObj.manufacturer}
+                                            setErrorMsg={setErrorMsg}
                                         />
                                     </TableCell>
                                 ))}

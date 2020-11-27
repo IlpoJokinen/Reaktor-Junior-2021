@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { AppBar, Toolbar, Typography, Tabs, Tab, Grid } from '@material-ui/core'
 import JacketList from './components/JacketList'
 import ShirtList from './components/ShirtList'
